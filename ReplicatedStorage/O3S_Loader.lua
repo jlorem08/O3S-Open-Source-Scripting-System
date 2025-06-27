@@ -167,6 +167,18 @@ function Loader.ClearCache(): ()
 	cachedRequiredModules = {}
 end
 
+function Loader.SafeRequire(module: ModuleScript): any?
+	local success, result = pcall(require, module)
+
+	if success then
+		cachedRequiredModules[module.Name] = result
+		return result
+	else
+		warn("Failed to require", module:GetFullName(), result)
+		return nil
+	end
+end
+
 --------------------
 -- PUBLIC METHODS --
 --------------------
