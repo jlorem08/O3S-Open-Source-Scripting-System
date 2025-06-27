@@ -79,6 +79,12 @@ function Loader.LoadModule(path: string | Instance): any
 
 	local requiredModule = nil
 
+	if path:IsA("string") then
+		if cachedRequiredModules[path] then
+			return cachedRequiredModules[path]
+		end
+	end
+
 	for _, module in ipairs(modules) do
 		if module == path or module.Name == path then
 			requiredModule = require(module)
@@ -97,6 +103,11 @@ function Loader.LoadAll(folder: Instance): {}
 			continue
 		end
 
+		if cachedRequiredModules[module.Name] then
+			dictionaryToReturn[module.Name] = cachedRequiredModules[module.Name]
+			continue
+		end
+
 		local requiredModule = require(module)
 		dictionaryToReturn[module.Name] = requiredModule
 	end
@@ -104,7 +115,7 @@ function Loader.LoadAll(folder: Instance): {}
 	return dictionaryToReturn
 end
 
-function Loader.RequiredOnce(module: ModuleScript)
+function Loader.RequiredOnce(module: ModuleScript): ()
 	if cachedRequiredModules[module.Name] then
 		return
 	end
@@ -115,6 +126,10 @@ end
 function Loader.get(moduleName: string): ModuleScript?
 	local isServer = RunService:IsServer()
 	local modules = {} :: { ModuleScript }
+
+	if cachedRequiredModules[moduleName] then
+		return cachedRequiredModules[moduleName]
+	end
 
 	if isServer then
 		modules = getServerModules()
