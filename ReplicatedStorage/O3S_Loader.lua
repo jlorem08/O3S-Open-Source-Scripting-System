@@ -47,6 +47,14 @@ end
 local function getClientModules(): { Modulescript }
 	local modulesToReturn = {}
 
+	for _, clientModule in ipairs(clientModules:GetChildren() :: { ModuleScript }) do
+		modulesToReturn[clientModule.Name] = clientModule
+	end
+
+	for _, sharedModule in ipairs(sharedModules:GetChildren() :: { ModuleScript }) do
+		modulesToReturn[sharedModule.Name] = sharedModule
+	end
+
 	return modulesToReturn
 end
 
