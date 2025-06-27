@@ -103,6 +103,23 @@ function Loader.LoadAll(folder: Instance): {}
 	return dictionaryToReturn
 end
 
+function Loader.get(moduleName: string): ModuleScript?
+	local isServer = RunService:IsServer()
+	local modules = {} :: { ModuleScript }
+
+	if isServer then
+		modules = getServerModules()
+	else
+		modules = getClientModules()
+	end
+
+	for _, module in ipairs(modules) do
+		if module.Name == moduleName then
+			return module
+		end
+	end
+end
+
 --------------------
 -- PUBLIC METHODS --
 --------------------
