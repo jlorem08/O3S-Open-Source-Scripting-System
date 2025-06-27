@@ -142,6 +142,15 @@ function Loader.get(moduleName: string): ModuleScript?
 	end
 end
 
+function Loader.Register(name: string, module: ModuleScript): () -> nil
+	if cachedRequiredModules[module.Name] then
+		cachedRequiredModules[name] = cachedRequiredModules[module.Name]
+		cachedRequiredModules[module.Name] = nil
+	else
+		cachedRequiredModules[name] = require(module)
+	end
+end
+
 --------------------
 -- PUBLIC METHODS --
 --------------------
