@@ -66,15 +66,26 @@ end
 -- PUBLIC FUNCTIONS --
 ----------------------
 
-function Loader.LoadModule(path: string | Instance)
+function Loader.LoadModule(path: string | Instance): any
 	local isServer = RunService:IsServer()
-	local modules = {}
+	local modules = {} :: { ModuleScript }
 
 	if isServer then
 		modules = getServerModules()
 	else
 		modules = getClientModules()
 	end
+
+	local requiredModule = nil
+
+	for _, module in ipairs(modules) do
+		if module == path or module.Name == path then
+			requiredModule = require(module)
+			break
+		end
+	end
+
+	return requiredModule
 end
 
 --------------------
