@@ -88,6 +88,21 @@ function Loader.LoadModule(path: string | Instance): any
 	return requiredModule
 end
 
+function Loader.LoadAll(folder: Instance): {}
+	local dictionaryToReturn = {}
+
+	for _, module in ipairs(folder:GetChildren()) do
+		if not module:IsA("ModuleScript") then
+			continue
+		end
+
+		local requiredModule = require(module)
+		dictionaryToReturn[module.Name] = requiredModule
+	end
+
+	return dictionaryToReturn
+end
+
 --------------------
 -- PUBLIC METHODS --
 --------------------
