@@ -149,6 +149,10 @@ function Loader.Register(name: string, module: ModuleScript): () -> nil
 	else
 		cachedRequiredModules[name] = require(module)
 	end
+
+	return function()
+		cachedRequiredModules[name] = nil
+	end
 end
 
 --------------------
