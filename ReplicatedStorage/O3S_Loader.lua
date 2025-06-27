@@ -159,6 +159,10 @@ function Loader.IsLoaded(module: ModuleScript): boolean
 	return (cachedRequiredModules[module.Name] ~= nil)
 end
 
+function Loader.ClearCache(): ()
+	cachedRequiredModules = {}
+end
+
 --------------------
 -- PUBLIC METHODS --
 --------------------
