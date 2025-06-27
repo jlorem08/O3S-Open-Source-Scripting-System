@@ -19,7 +19,7 @@ local sharedModules = ReplicatedStorage:WaitForChild("SharedModules")
 ---------------
 -- VARIABLES --
 ---------------
-local cachedRequiredModules = {} :: { [string]: { [any]: any } }
+local cachedRequiredModules = {} :: { [string]: any }
 
 ------------
 -- MODULE --
@@ -77,15 +77,17 @@ function Loader.LoadModule(path: string | Instance): any
 
 	local requiredModule = nil
 
-	if path:IsA("string") then
+	if typeof(path) == "string" then
 		if cachedRequiredModules[path] then
 			return cachedRequiredModules[path]
 		end
 	end
 
-	for _, module in ipairs(modules) do
+	for _, module in pairs(modules) do
 		if module == path or module.Name == path then
 			requiredModule = require(module)
+			cachedRequiredModules[module.Name] = requiredModule
+
 			break
 		end
 	end
@@ -108,17 +110,19 @@ function Loader.LoadAll(folder: Instance): {}
 
 		local requiredModule = require(module)
 		dictionaryToReturn[module.Name] = requiredModule
+		cachedRequiredModules[module.Name] = requiredModule
 	end
 
 	return dictionaryToReturn
 end
 
-function Loader.RequiredOnce(module: ModuleScript): ()
+function Loader.RequiredOnce(module: ModuleScript): any
 	if cachedRequiredModules[module.Name] then
 		return
 	end
 
 	cachedRequiredModules[module.Name] = require(module)
+	return cachedRequiredModules[module.Name]
 end
 
 function Loader.Get(moduleName: string): ModuleScript?
