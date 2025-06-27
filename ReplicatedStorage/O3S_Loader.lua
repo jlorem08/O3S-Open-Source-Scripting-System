@@ -3,6 +3,7 @@
 --------------
 -- SERVICES --
 --------------
+local ExperienceStateRecordingService = game:GetService("ExperienceStateRecordingService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local ServerScriptService = game:GetService("ServerScriptService")
@@ -21,6 +22,7 @@ local sharedModules = ReplicatedStorage:WaitForChild("SharedModules")
 ---------------
 -- VARIABLES --
 ---------------
+local cachedRequiredModules = {} :: { [string]: { [any]: any } }
 
 ------------
 -- MODULE --
@@ -101,6 +103,14 @@ function Loader.LoadAll(folder: Instance): {}
 	end
 
 	return dictionaryToReturn
+end
+
+function Loader.RequiredOnce(module: ModuleScript)
+	if cachedRequiredModules[module.Name] then
+		return
+	end
+
+	cachedRequiredModules[module.Name] = require(module)
 end
 
 function Loader.get(moduleName: string): ModuleScript?
