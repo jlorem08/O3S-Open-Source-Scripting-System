@@ -155,6 +155,10 @@ function Loader.Register(name: string, module: ModuleScript): () -> nil
 	end
 end
 
+function Loader.IsLoaded(module: ModuleScript): boolean
+	return (cachedRequiredModules[module.Name] ~= nil)
+end
+
 --------------------
 -- PUBLIC METHODS --
 --------------------
