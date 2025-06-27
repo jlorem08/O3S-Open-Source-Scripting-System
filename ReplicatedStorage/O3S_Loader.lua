@@ -121,7 +121,7 @@ function Loader.RequiredOnce(module: ModuleScript): ()
 	cachedRequiredModules[module.Name] = require(module)
 end
 
-function Loader.get(moduleName: string): ModuleScript?
+function Loader.Get(moduleName: string): ModuleScript?
 	local isServer = RunService:IsServer()
 	local modules = {} :: { ModuleScript }
 
